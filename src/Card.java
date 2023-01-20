@@ -1,4 +1,4 @@
-public class Card implements Comparable<Card>{
+public class Card implements Comparable<Card>, Cloneable{
 
     private Rank rank;
     private Suit suit;
@@ -41,5 +41,9 @@ public class Card implements Comparable<Card>{
 
         if (rankComparison != 0) return rankComparison;
         else return suitComparison;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

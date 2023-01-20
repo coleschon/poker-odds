@@ -5,13 +5,14 @@ public class Player {
     private Rank rank1, rank2, rank3, rank4, rank5;
     private Suit suit1, suit2, suit3, suit4, suit5;
     private Hand hand;
+    private List<Rank> kicker;
 
 
     public Player() {
         this.cards = new ArrayList<>();
     }
 
-    public Player(ArrayList<Card> cards) {
+    public Player(List<Card> cards) {
         this.cards = cards;
         Collections.sort(cards);
         rank1 = this.cards.get(0).getRank();
@@ -24,6 +25,7 @@ public class Player {
         suit3 = this.cards.get(2).getSuit();
         suit4 = this.cards.get(3).getSuit();
         suit5 = this.cards.get(4).getSuit();
+        evaluateHand();
     }
 
     protected List<Card> getCards() {
@@ -35,8 +37,10 @@ public class Player {
     }
 
     protected Hand getHand() {
-        return hand;
+        return this.hand;
     }
+
+    protected List<Rank> getKicker() { return this.kicker; }
 
     protected void evaluateHand() {
         if (royalFlush()) this.hand = Hand.ROYAL_FLUSH;
@@ -49,14 +53,15 @@ public class Player {
         else if (twoPair()) this.hand = Hand.TWO_PAIR;
         else if (pair()) this.hand = Hand.PAIR;
         else {
-            hand = Hand.HIGH_CARD;
-            hand.setKicker(new ArrayList<>(List.of(rank1, rank2, rank3, rank4, rank5)));
+            this.hand = Hand.HIGH_CARD;
+            this.kicker = (new ArrayList<>(List.of(rank1, rank2, rank3, rank4, rank5)));
         }
     }
 
     protected boolean royalFlush() {
         if (rank1 == Rank.ACE && straightFlush()) {
-            hand = Hand.ROYAL_FLUSH;
+            this.hand = Hand.ROYAL_FLUSH;
+            this.kicker = (new ArrayList<>(List.of(Rank.ACE)));
             return true;
         }
         return false;
@@ -64,8 +69,8 @@ public class Player {
 
     protected boolean straightFlush() {
         if (flush() && straight()) {
-            hand = Hand.STRAIGHT_FLUSH;
-            hand.setKicker(new ArrayList<>(List.of(rank1)));
+            this.hand = Hand.STRAIGHT_FLUSH;
+            this.kicker = (new ArrayList<>(List.of(rank1)));
             return true;
         }
         return false;
@@ -73,9 +78,9 @@ public class Player {
 
     protected boolean fourOfAKind() {
         if (rank1 == rank2 && rank2 == rank3 && rank3 == rank4 || rank2 == rank3 && rank3 == rank4 && rank4 == rank5) {
-            hand = Hand.FOUR_OF_A_KIND;
-            if (rank1 == rank2) hand.setKicker(new ArrayList<>(List.of(rank1, rank5)));
-            else hand.setKicker(new ArrayList<>(List.of(rank2, rank1)));
+            this.hand = Hand.FOUR_OF_A_KIND;
+            if (rank1 == rank2) this.kicker = (new ArrayList<>(List.of(rank1, rank5)));
+            else this.kicker = (new ArrayList<>(List.of(rank2, rank1)));
             return true;
         }
         return false;
@@ -83,9 +88,9 @@ public class Player {
 
     protected boolean fullHouse() {
         if (rank1 == rank2 && rank2 == rank3 && rank4 == rank5 || rank1 == rank2 && rank3 == rank4 && rank4 == rank5) {
-            hand = Hand.FULL_HOUSE;
-            if (rank1 == rank3) hand.setKicker(new ArrayList<>(List.of(rank1, rank4)));
-            else hand.setKicker(new ArrayList<>(List.of(rank3, rank1)));
+            this.hand = Hand.FULL_HOUSE;
+            if (rank1 == rank3) this.kicker = (new ArrayList<>(List.of(rank1, rank4)));
+            else this.kicker = (new ArrayList<>(List.of(rank3, rank1)));
             return true;
         }
         return false;
@@ -93,8 +98,8 @@ public class Player {
 
     protected boolean flush() {
         if (suit1 == suit2 && suit2 == suit3 && suit3 == suit4 && suit4 == suit5) {
-            hand = Hand.FLUSH;
-            hand.setKicker(new ArrayList<>(List.of(rank1, rank2, rank3, rank4, rank5)));
+            this.hand = Hand.FLUSH;
+            this.kicker = (new ArrayList<>(List.of(rank1, rank2, rank3, rank4, rank5)));
             return true;
         }
         return false;
@@ -102,8 +107,8 @@ public class Player {
 
     protected boolean straight() {
         if (rank1.compareTo(rank2) == -1 && rank2.compareTo(rank3) == -1 && rank3.compareTo(rank4) == -1 && rank4.compareTo(rank5) == -1) {
-            hand = Hand.STRAIGHT;
-            hand.setKicker(new ArrayList<>(List.of(rank1)));
+            this.hand = Hand.STRAIGHT;
+            this.kicker = (new ArrayList<>(List.of(rank1)));
             return true;
         }
         return false;
@@ -111,10 +116,10 @@ public class Player {
 
     protected boolean threeOfAKind() {
         if (rank1 == rank2 && rank2 == rank3 || rank2 == rank3 && rank3 == rank4 || rank3 == rank4 && rank4 == rank5) {
-            hand = Hand.THREE_OF_A_KIND;
-            if (rank1 == rank2 && rank2 == rank3) hand.setKicker(new ArrayList<>(List.of(rank1, rank4, rank5)));
-            else if (rank2 == rank3 && rank3 == rank4) hand.setKicker(new ArrayList<>(List.of(rank2, rank1, rank5)));
-            else hand.setKicker(new ArrayList<>(List.of(rank3, rank1, rank2)));
+            this.hand = Hand.THREE_OF_A_KIND;
+            if (rank1 == rank2 && rank2 == rank3) this.kicker = (new ArrayList<>(List.of(rank1, rank4, rank5)));
+            else if (rank2 == rank3 && rank3 == rank4) this.kicker = (new ArrayList<>(List.of(rank2, rank1, rank5)));
+            else this.kicker = (new ArrayList<>(List.of(rank3, rank1, rank2)));
             return true;
         }
         return false;
@@ -134,11 +139,11 @@ public class Player {
         }
 
         if (pairCount == 2) {
-            hand = Hand.TWO_PAIR;
+            this.hand = Hand.TWO_PAIR;
             int kicker = kickerPosition.get(0);
-            if (kicker == 0) hand.setKicker(new ArrayList<>(List.of(rank2, rank4, rank1)));
-            else if (kicker == 2) hand.setKicker(new ArrayList<>(List.of(rank1, rank4, rank3)));
-            else hand.setKicker(new ArrayList<>(List.of(rank1, rank3, rank5)));
+            if (kicker == 0) this.kicker = (new ArrayList<>(List.of(rank2, rank4, rank1)));
+            else if (kicker == 2) this.kicker = (new ArrayList<>(List.of(rank1, rank4, rank3)));
+            else this.kicker = (new ArrayList<>(List.of(rank1, rank3, rank5)));
             return true;
         }
         return false;
@@ -146,11 +151,11 @@ public class Player {
 
     protected boolean pair() {
         if (rank1 == rank2 || rank2 == rank3 || rank3 == rank4 || rank4 == rank5) {
-            hand = Hand.PAIR;
-            if (rank1 == rank2) hand.setKicker(new ArrayList<>(List.of(rank1, rank3, rank4, rank5)));
-            else if (rank2 == rank3) hand.setKicker(new ArrayList<>(List.of(rank2, rank1, rank4, rank5)));
-            else if (rank3 == rank4) hand.setKicker(new ArrayList<>(List.of(rank3, rank1, rank2, rank5)));
-            else hand.setKicker(new ArrayList<>(List.of(rank4, rank1, rank2, rank3)));
+            this.hand = Hand.PAIR;
+            if (rank1 == rank2) this.kicker = (new ArrayList<>(List.of(rank1, rank3, rank4, rank5)));
+            else if (rank2 == rank3) this.kicker = (new ArrayList<>(List.of(rank2, rank1, rank4, rank5)));
+            else if (rank3 == rank4) this.kicker = (new ArrayList<>(List.of(rank3, rank1, rank2, rank5)));
+            else this.kicker = (new ArrayList<>(List.of(rank4, rank1, rank2, rank3)));
             return true;
         }
         return false;

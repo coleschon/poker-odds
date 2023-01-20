@@ -14,29 +14,29 @@ public enum Hand {
     HIGH_CARD("High card");
 
     private final String name;
-    private List<Rank> kicker;
+//    private List<Rank> kicker;
 
     private Hand(String name) {
         this.name = name;
     }
 
-    public List<Rank> getKicker() {
-        return kicker;
-    }
-
-    public void setKicker(List<Rank> kicker) {
-        this.kicker = kicker;
-    }
-
-    public String getKickerString(){
-        if (Objects.isNull(kicker)) return "";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < kicker.size(); i++) {
-            sb.append(kicker.get(i));
-            if (i != kicker.size()-1) sb.append(", ");
-        }
-        return sb.toString();
-    }
+//    public List<Rank> getKicker() {
+//        return kicker;
+//    }
+//
+//    public void setKicker(List<Rank> kicker) {
+//        this.kicker = kicker;
+//    }
+//
+//    public String getKickerString(){
+//        if (Objects.isNull(kicker)) return "";
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < kicker.size(); i++) {
+//            sb.append(kicker.get(i));
+//            if (i != kicker.size()-1) sb.append(", ");
+//        }
+//        return sb.toString();
+//    }
 
     @Override
     public String toString() {

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Deck {
@@ -18,7 +19,6 @@ public class Deck {
             new Card(Rank.FOUR, Suit.CLUBS),
             new Card(Rank.THREE, Suit.CLUBS),
             new Card(Rank.TWO, Suit.CLUBS),
-            new Card(Rank.ONE, Suit.CLUBS),
             new Card(Rank.ACE, Suit.DIAMONDS),
             new Card(Rank.KING, Suit.DIAMONDS),
             new Card(Rank.QUEEN, Suit.DIAMONDS),
@@ -32,7 +32,6 @@ public class Deck {
             new Card(Rank.FOUR, Suit.DIAMONDS),
             new Card(Rank.THREE, Suit.DIAMONDS),
             new Card(Rank.TWO, Suit.DIAMONDS),
-            new Card(Rank.ONE, Suit.DIAMONDS),
             new Card(Rank.ACE, Suit.SPADES),
             new Card(Rank.KING, Suit.SPADES),
             new Card(Rank.QUEEN, Suit.SPADES),
@@ -46,7 +45,6 @@ public class Deck {
             new Card(Rank.FOUR, Suit.SPADES),
             new Card(Rank.THREE, Suit.SPADES),
             new Card(Rank.TWO, Suit.SPADES),
-            new Card(Rank.ONE, Suit.SPADES),
             new Card(Rank.ACE, Suit.HEARTS),
             new Card(Rank.KING, Suit.HEARTS),
             new Card(Rank.QUEEN, Suit.HEARTS),
@@ -59,13 +57,22 @@ public class Deck {
             new Card(Rank.FIVE, Suit.HEARTS),
             new Card(Rank.FOUR, Suit.HEARTS),
             new Card(Rank.THREE, Suit.HEARTS),
-            new Card(Rank.TWO, Suit.HEARTS),
-            new Card(Rank.ONE, Suit.HEARTS)));
+            new Card(Rank.TWO, Suit.HEARTS)));
 
     public Deck() {
         cards = new ArrayList<>();
         for (Card card : fullCards)
             cards.add(card);
+        Collections.sort(cards);
+    }
+
+    protected List<Card> getCards() {
+        return cards;
+    }
+
+    protected void addCard(Card card) {
+        cards.add(card);
+        Collections.sort(cards);
     }
 
     protected void removeCards(ArrayList<Card> cards) {
@@ -74,7 +81,7 @@ public class Deck {
     }
 
     protected void removeCard(Card card) {
-        this.cards.remove(card);
+        cards.remove(card);
     }
 
     @Override
@@ -91,8 +98,8 @@ public class Deck {
                 if (cards.contains(card)) sb.append(ANSI_WHITE_HI_BACKGROUND + suit.getColor());
                 else sb.append(ANSI_YELLOW); // removed card
                 sb.append(card + ANSI_RESET);
-                if (rank != Rank.ONE) sb.append(" ");
-                if (rank == Rank.ONE && suit != Suit.HEARTS) sb.append("\n"); // last suit
+                if (rank != Rank.TWO) sb.append(" ");
+                if (rank == Rank.TWO && suit != Suit.HEARTS) sb.append("\n"); // last suit
             }
         }
 
